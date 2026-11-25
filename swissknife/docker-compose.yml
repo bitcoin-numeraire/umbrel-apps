@@ -7,6 +7,18 @@ services:
 
   web:
     image: ${APP_SWISSKNIFE_IMAGE:?Pin the published release with a local dashboard before store submission}
+    entrypoint:
+      - /bin/sh
+      - -ec
+      - |
+        if printf '%s\n' "$$UMBREL_ONION" | grep -Eq '^[a-z2-7]{56}\.onion$$'; then
+          export SWISSKNIFE_DOMAIN="$$UMBREL_ONION"
+          export SWISSKNIFE_HOST="http://$$UMBREL_ONION"
+        else
+          export SWISSKNIFE_DOMAIN=localhost
+          export SWISSKNIFE_HOST="http://$$UMBREL_LOCAL"
+        fi
+        exec swissknife
     restart: on-failure
     stop_grace_period: 1m
     environment:
@@ -18,8 +30,8 @@ services:
       SWISSKNIFE_LND_GRPC_CONFIG__ENDPOINT: "https://${APP_LIGHTNING_NODE_IP}:${APP_LIGHTNING_NODE_GRPC_PORT}"
       SWISSKNIFE_LND_GRPC_CONFIG__CERT_PATH: /lnd/tls.cert
       SWISSKNIFE_LND_GRPC_CONFIG__MACAROON_PATH: /lnd/admin.macaroon
-      SWISSKNIFE_HOST: ${APP_SWISSKNIFE_PUBLIC_ORIGIN}
-      SWISSKNIFE_DOMAIN: ${APP_SWISSKNIFE_RECEIVE_DOMAIN}
+      UMBREL_ONION: ${APP_HIDDEN_SERVICE:-}
+      UMBREL_LOCAL: "${DEVICE_DOMAIN_NAME}:${APP_PROXY_PORT}"
     volumes:
       - ${APP_DATA_DIR}/data/storage:/data
       - ${APP_LIGHTNING_NODE_DATA_DIR}/tls.cert:/lnd/tls.cert:ro
