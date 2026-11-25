@@ -1,0 +1,29 @@
+manifestVersion: 1
+id: swissknife
+storage:
+  dataRoot: data
+category: bitcoin
+name: SwissKnife
+version: "0.3.5"
+tagline: Manage Bitcoin wallets with your Lightning node
+description: >-
+  Receive Bitcoin and Lightning payments, manage wallets and review transaction
+  history using the Lightning Node running on your Umbrel.
+
+
+  Open SwissKnife to create the first local owner account and password. Each
+  wallet starts with a zero balance. Connect applications with scoped API keys.
+releaseNotes: ""
+developer: Numeraire
+website: https://numeraire.tech
+dependencies:
+  - lightning
+repo: https://github.com/bitcoin-numeraire/swissknife
+support: https://github.com/bitcoin-numeraire/swissknife/issues
+port: 42365
+gallery: []
+path: ""
+defaultUsername: ""
+defaultPassword: ""
+submitter: Numeraire
+submission: https://github.com/bitcoin-numeraire/umbrel-apps/pull/1
