@@ -1,0 +1,26 @@
+services:
+  app_proxy:
+    environment:
+      APP_HOST: swissknife_web_1
+      APP_PORT: 3000
+      PROXY_AUTH_WHITELIST: "/.well-known/lnurlp/*,/lnurlp/*"
+
+  web:
+    image: ${APP_SWISSKNIFE_IMAGE:?Pin the published release with a local dashboard before store submission}
+    restart: on-failure
+    stop_grace_period: 1m
+    environment:
+      SWISSKNIFE_WEB__ADDR: "0.0.0.0:3000"
+      SWISSKNIFE_AUTH_PROVIDER: jwt
+      SWISSKNIFE_JWT__SECRET: ${APP_SEED}
+      SWISSKNIFE_DATABASE__URL: "sqlite:///data/swissknife.db?mode=rwc"
+      SWISSKNIFE_LN_PROVIDER: lnd_grpc
+      SWISSKNIFE_LND_GRPC_CONFIG__ENDPOINT: "https://${APP_LIGHTNING_NODE_IP}:${APP_LIGHTNING_NODE_GRPC_PORT}"
+      SWISSKNIFE_LND_GRPC_CONFIG__CERT_PATH: /lnd/tls.cert
+      SWISSKNIFE_LND_GRPC_CONFIG__MACAROON_PATH: /lnd/admin.macaroon
+      SWISSKNIFE_HOST: ${APP_SWISSKNIFE_PUBLIC_ORIGIN}
+      SWISSKNIFE_DOMAIN: ${APP_SWISSKNIFE_RECEIVE_DOMAIN}
+    volumes:
+      - ${APP_DATA_DIR}/data/storage:/data
+      - ${APP_LIGHTNING_NODE_DATA_DIR}/tls.cert:/lnd/tls.cert:ro
+      - ${APP_LIGHTNING_NODE_DATA_DIR}/data/chain/bitcoin/${APP_BITCOIN_NETWORK}/admin.macaroon:/lnd/admin.macaroon:ro
