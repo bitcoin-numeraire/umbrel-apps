@@ -34,5 +34,17 @@ services:
       UMBREL_LOCAL: "${DEVICE_DOMAIN_NAME}:${APP_PROXY_PORT}"
     volumes:
       - ${APP_DATA_DIR}/data/storage:/data
-      - ${APP_LIGHTNING_NODE_DATA_DIR}/tls.cert:/lnd/tls.cert:ro
-      - ${APP_LIGHTNING_NODE_DATA_DIR}/data/chain/bitcoin/${APP_BITCOIN_NETWORK}/admin.macaroon:/lnd/admin.macaroon:ro
+    configs:
+      - source: lnd_tls
+        target: /lnd/tls.cert
+    secrets:
+      - source: lnd_admin
+        target: /lnd/admin.macaroon
+
+configs:
+  lnd_tls:
+    file: ${APP_LIGHTNING_NODE_DATA_DIR}/tls.cert
+
+secrets:
+  lnd_admin:
+    file: ${APP_LIGHTNING_NODE_DATA_DIR}/data/chain/bitcoin/${APP_BITCOIN_NETWORK}/admin.macaroon
