@@ -11,6 +11,7 @@ description: >-
   history using the Lightning Node running on your Umbrel.
 
 
+  Finish setting up your wallet in Lightning Node before installing SwissKnife.
   Open SwissKnife to create the first local owner account and password. Each
   wallet starts with a zero balance. Connect applications with scoped API keys.
 releaseNotes: ""
@@ -20,7 +21,7 @@ dependencies:
   - lightning
 repo: https://github.com/bitcoin-numeraire/swissknife
 support: https://github.com/bitcoin-numeraire/swissknife/issues
-port: 42365
+port: 14265
 gallery: []
 path: ""
 defaultUsername: ""
